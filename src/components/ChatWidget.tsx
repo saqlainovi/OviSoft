@@ -1,254 +1,192 @@
 'use client';
 
-import React, { useState } from 'react';
-import { MessageSquare, X, Send, Bot } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { MessageSquare, X, Send, Bot, Sparkles, Zap, ArrowUpRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLanguage } from '@/context/LanguageContext';
 
 type Message = {
     id: number;
     text: string;
     sender: 'user' | 'bot';
+    engine?: string;
 };
 
-
-// Animated AI Avatar Component
-const AnimatedAvatar = () => (
-    <div className="relative w-8 h-8 flex items-center justify-center">
-        {/* Pulsing outer glow */}
-        <motion.div
-            animate={{
-                scale: [1, 1.2, 1],
-                opacity: [0.3, 0.6, 0.3],
-            }}
-            transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-            }}
-            className="absolute inset-0 bg-blue-500 rounded-full blur-md"
-        />
-
-        {/* Rotating border/ring */}
-        <motion.div
-            animate={{
-                rotate: 360,
-            }}
-            transition={{
-                duration: 8,
-                repeat: Infinity,
-                ease: "linear",
-            }}
-            className="relative w-full h-full bg-gradient-to-tr from-blue-400 to-purple-500 rounded-full flex items-center justify-center p-[2px]"
-        >
-            <div className="w-full h-full bg-black rounded-full flex items-center justify-center overflow-hidden">
-                {/* Voice waves */}
-                <motion.div
-                    animate={{ height: ["20%", "60%", "20%"] }}
-                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                    className="w-1 bg-blue-400 rounded-full mx-[1px]"
-                />
-                <motion.div
-                    animate={{ height: ["40%", "80%", "40%"] }}
-                    transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut", delay: 0.1 }}
-                    className="w-1 bg-purple-400 rounded-full mx-[1px]"
-                />
-                <motion.div
-                    animate={{ height: ["20%", "60%", "20%"] }}
-                    transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", delay: 0.2 }}
-                    className="w-1 bg-blue-400 rounded-full mx-[1px]"
-                />
-            </div>
-        </motion.div>
-    </div>
-);
-
-const ChatWidget = () => {
+export default function ChatWidget() {
+    const { language } = useLanguage();
     const [isOpen, setIsOpen] = useState(false);
     const [input, setInput] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const [messages, setMessages] = useState<Message[]>([
-        { id: 1, text: "Hi! I'm OviSoft AI. How can I help you build your dream project today?", sender: 'bot' }
+        {
+            id: 1,
+            text: language === 'bn'
+                ? "স্বাগতম! আমি ওভিসফট ডিজিটাল এআই কনসালট্যান্ট। আপনার ওয়েবসাইট, ই-কমার্স বা সফটওয়্যার প্রজেক্ট নিয়ে কীভাবে সাহায্য করতে পারি?"
+                : "Hello! Welcome to OviSoft.tech. How can I help you choose the best website, software, or e-commerce solution for your business today?",
+            sender: 'bot'
+        }
     ]);
 
-    // Auto-scroll ref
-    const messagesEndRef = React.useRef<HTMLDivElement>(null);
+    const messagesEndRef = useRef<HTMLDivElement>(null);
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
-    React.useEffect(() => {
+    useEffect(() => {
         scrollToBottom();
-    }, [messages]);
-
-    // "Smart" Rule-Based Logic (Enhanced Knowledge Base)
-    const getSmartResponse = (text: string) => {
-        const lowerText = text.toLowerCase();
-
-        // GREETINGS
-        if (lowerText.match(/hi|hello|hey|greetings|start|yo/)) {
-            return "Hello! 👋 I am OviSoft AI. I'm here to help you turn your ideas into reality. Ask me about **Websites**, **Mobile Apps**, or **AI Solutions**!";
-        }
-
-        // GUIDE / HELP / DETAILS
-        if (lowerText.match(/guide|help|details|teach|learn|how to|explain/)) {
-            return "I can guide you! Here is how we work:\n1. **Consultation:** We discuss your idea.\n2. **Design:** We create stunning UI/UX.\n3. **Development:** We build using the latest tech.\n4. **Launch:** We deploy your project to the world.\n\nWhich stage are you interested in?";
-        }
-
-        // TECHNOLOGIES / STACK
-        if (lowerText.match(/tech|stack|react|next|node|firebase|database|language/)) {
-            return "We use the most modern tech stack:\n🚀 **Frontend:** Next.js, React, Tailwind CSS\n🔥 **Backend:** Node.js, Firebase, Supabase\n📱 **Mobile:** React Native, Flutter\n🤖 **AI:** Google Gemini, OpenAI";
-        }
-
-        // SERVICES - WEB
-        if (lowerText.match(/website|web|site|landing page|ecommerce|blog|portfolio/)) {
-            return "Excellent choice! 🌐 We specialize in high-performance websites. Whether you need a simple **Portfolio**, a **Business Site**, or a full **E-Commerce Store**, we can build it. What kind of website do you need?";
-        }
-
-        // SERVICES - APP
-        if (lowerText.match(/app|mobile|android|ios|flutter/)) {
-            return "We build native-feel mobile apps! 📱 We can create stunning apps for both **iPhone** and **Android**. Do you have a specific feature list in mind?";
-        }
-
-        // SERVICES - AI
-        if (lowerText.match(/ai|bot|chat|intelligence|gpt|gemini/)) {
-            return "Yes, we implement AI solutions! 🤖 We can build **Chatbots** (like me!), **AI Content Generators**, or **Data Analysis tools** for your business.";
-        }
-
-        // PRICING
-        if (lowerText.match(/price|cost|much|money|rate|budget/)) {
-            return "Our pricing depends on the project scope. 💰 We offer competitive custom packages:\n- **Basic:** For startups\n- **Pro:** For growing businesses\n- **Enterprise:** Full-scale solutions.\n\nShall we schedule a quick call to discuss your budget?";
-        }
-
-        // CONTACT / MEETING
-        // CONTACT / MEETING
-        if (lowerText.match(/contact|mail|phone|call|meeting|hire|email/)) {
-            return "Great! 🤝 You can reach our team directly at <strong>admin@ovisoft.tech</strong>, or <a href='/start-project' class='text-blue-400 underline hover:text-blue-300'>Click Here to Start a Project</a>.";
-        }
-
-        // CREATOR / IDENTITY
-        if (lowerText.match(/who are you|made you|created|owner/)) {
-            return "I am OviSoft AI, a digital assistant created by the **OviSoft Engineering Team**. My mission is to help clients like you build amazing software.";
-        }
-
-        // DEFAULT FALLBACK (Professional & Engaging)
-        // DEFAULT FALLBACK (Professional & Engaging)
-        return "That sounds interesting! 🤔 To give you the best advice, I'd recommend connecting with our Senior Developers. Could you please send us a <a href='/start-project' class='text-blue-400 underline hover:text-blue-300'>Project Request</a> with more details? Or try asking about 'Websites', 'Apps', or 'Pricing'.";
-    };
+    }, [messages, isLoading]);
 
     const handleSend = async () => {
-        if (!input.trim()) return;
+        if (!input.trim() || isLoading) return;
 
-        const userMessage: Message = { id: Date.now(), text: input, sender: 'user' };
+        const userText = input.trim();
+        const userMessage: Message = { id: Date.now(), text: userText, sender: 'user' };
         setMessages(prev => [...prev, userMessage]);
         setInput('');
+        setIsLoading(true);
 
-        // Add loading state to simulate "Thinking"
-        const loadingMessageId = Date.now() + 1;
-        setMessages(prev => [...prev, { id: loadingMessageId, text: "Thinking...", sender: 'bot' }]);
+        try {
+            // Build history payload for local OSS 20B engine
+            const historyPayload = messages.slice(-4).map(m => ({
+                role: m.sender === 'user' ? 'user' : 'assistant',
+                content: m.text
+            }));
 
-        // Simulate Network Delay (1.5 seconds) to feel like real AI
-        setTimeout(() => {
-            const responseText = getSmartResponse(input);
-            setMessages(prev => prev.map(msg =>
-                msg.id === loadingMessageId ? { ...msg, text: responseText } : msg
-            ));
-        }, 1500);
+            const res = await fetch("http://192.168.0.120:9090/api/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    message: userText,
+                    history: historyPayload
+                })
+            });
+
+            if (!res.ok) throw new Error("API response error");
+
+            const data = await res.json();
+            const botReply = data.reply || (language === 'bn' ? "আমাদের সকল প্যাকেজ দেখতে বা আলোচনা করতে 'Start Project'-এ ক্লিক করুন।" : "To view our packages or discuss scope, please click 'Start Project' or message us.");
+
+            setMessages(prev => [
+                ...prev,
+                { id: Date.now() + 1, text: botReply, sender: 'bot', engine: data.engine }
+            ]);
+        } catch (err) {
+            console.error("Local AI chat error:", err);
+            // Graceful fallback response
+            const fallback = language === 'bn'
+                ? "ওভিসফটে যোগাযোগ করার জন্য ধন্যবাদ। আমাদের স্টার্টার ওয়েবসাইট ৳৫,০০০ থেকে এবং ই-কমার্স ৳৩৫,০০০ থেকে শুরু। বিস্তারিত জানতে 'Start Project'-এ ক্লিক করুন।"
+                : "Thank you for reaching out to OviSoft.tech. Starter websites start from ৳5,000 and E-Commerce from ৳35,000 with 1st year free cloud hosting. Click 'Start Project' to connect with us!";
+            setMessages(prev => [
+                ...prev,
+                { id: Date.now() + 1, text: fallback, sender: 'bot', engine: 'OviSoft Local Assistant' }
+            ]);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
-    const handleKeyPress = (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter') handleSend();
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            handleSend();
+        }
     };
 
     return (
-        <>
+        <div className="fixed bottom-6 right-6 z-[99999]">
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
-                        initial={{ opacity: 0, y: 20, scale: 0.9 }}
+                        initial={{ opacity: 0, y: 20, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 20, scale: 0.9 }}
-                        className="fixed bottom-24 right-5 w-80 md:w-96 h-96 bg-black/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col z-50"
+                        exit={{ opacity: 0, y: 20, scale: 0.95 }}
+                        transition={{ duration: 0.25 }}
+                        className="w-[90vw] sm:w-[380px] h-[520px] bg-[#0c0c12] border border-accent/40 rounded-3xl shadow-[0_0_50px_rgba(0,243,255,0.15)] flex flex-col overflow-hidden mb-4 backdrop-blur-xl"
                     >
                         {/* Header */}
-                        <div className="p-4 bg-gradient-to-r from-blue-900/50 to-purple-900/50 border-b border-white/10 flex items-center justify-between">
-                            <div className="flex items-center space-x-3">
-                                <AnimatedAvatar />
+                        <div className="p-4 bg-[#12121c] border-b border-white/10 flex items-center justify-between">
+                            <div className="flex items-center gap-3">
+                                <div className="w-9 h-9 rounded-full bg-accent/20 border border-accent/40 flex items-center justify-center text-accent shadow-[0_0_15px_rgba(0,243,255,0.3)]">
+                                    <Sparkles size={18} />
+                                </div>
                                 <div>
-                                    <h3 className="text-white font-bold text-sm tracking-wide">OviSoft AI</h3>
-                                    <p className="text-blue-200 text-xs flex items-center">
-                                        <span className="relative flex h-2 w-2 mr-2">
-                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                                            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                                        </span>
-                                        Online
+                                    <div className="flex items-center gap-2">
+                                        <h4 className="font-heading font-bold text-white text-sm">OviSoft AI</h4>
+                                        <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                                    </div>
+                                    <p className="text-[10px] text-accent font-semibold tracking-wider">
+                                        ● 24/7 Digital Assistant • Online
                                     </p>
                                 </div>
                             </div>
                             <button
                                 onClick={() => setIsOpen(false)}
-                                className="text-white/60 hover:text-white transition-colors"
+                                className="p-1.5 rounded-full hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
                             >
-                                <X className="w-5 h-5" />
+                                <X size={18} />
                             </button>
                         </div>
 
-                        {/* Messages */}
-                        <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
-                            {messages.map((msg) => (
+                        {/* Messages Body */}
+                        <div className="flex-1 p-4 overflow-y-auto space-y-3.5 scrollbar-thin scrollbar-thumb-white/10">
+                            {messages.map((m) => (
                                 <div
-                                    key={msg.id}
-                                    className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                                    key={m.id}
+                                    className={`flex flex-col ${m.sender === 'user' ? 'items-end' : 'items-start'}`}
                                 >
                                     <div
-                                        className={`max-w-[80%] p-3 rounded-2xl text-sm ${msg.sender === 'user'
-                                            ? 'bg-blue-600 text-white rounded-tr-none'
-                                            : 'bg-white/10 text-gray-200 rounded-tl-none border border-white/5'
-                                            } whitespace-pre-wrap`}
-                                        dangerouslySetInnerHTML={msg.sender === 'bot' ? { __html: msg.text } : undefined}
+                                        className={`max-w-[85%] p-3.5 rounded-2xl text-xs leading-relaxed ${
+                                            m.sender === 'user'
+                                                ? 'bg-accent text-black font-medium rounded-tr-none shadow-md shadow-accent/20'
+                                                : 'bg-[#181822] text-gray-200 border border-white/10 rounded-tl-none'
+                                        }`}
                                     >
-                                        {msg.sender === 'user' ? msg.text : null}
+                                        <p className="whitespace-pre-wrap">{m.text}</p>
                                     </div>
                                 </div>
                             ))}
+
+                            {isLoading && (
+                                <div className="flex items-center gap-2 text-xs text-gray-400 bg-[#181822] p-3 rounded-2xl w-max border border-white/10">
+                                    <Zap size={14} className="animate-spin text-accent" />
+                                    <span>{language === 'bn' ? 'মডেল চিন্তা করছে...' : 'OSS 20B generating reply...'}</span>
+                                </div>
+                            )}
                             <div ref={messagesEndRef} />
                         </div>
 
-                        {/* Input */}
-                        <div className="p-4 bg-white/5 border-t border-white/10">
-                            <div className="flex items-center space-x-2">
-                                <input
-                                    type="text"
-                                    value={input}
-                                    onChange={(e) => setInput(e.target.value)}
-                                    onKeyPress={handleKeyPress}
-                                    placeholder="Ask me anything..."
-                                    className="flex-1 bg-black/40 border border-white/10 rounded-full px-4 py-2 text-sm text-white focus:outline-none focus:border-blue-500 placeholder-gray-500 transition-colors"
-                                />
-                                <button
-                                    onClick={handleSend}
-                                    className="p-2 bg-blue-600 rounded-full text-white hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                                    disabled={!input.trim()}
-                                >
-                                    <Send className="w-4 h-4" />
-                                </button>
-                            </div>
+                        {/* Input Footer */}
+                        <div className="p-3 bg-[#101018] border-t border-white/10 flex items-center gap-2">
+                            <input
+                                type="text"
+                                value={input}
+                                onChange={(e) => setInput(e.target.value)}
+                                onKeyDown={handleKeyDown}
+                                placeholder={language === 'bn' ? "আপনার প্রশ্ন লিখুন..." : "Ask about websites, pricing, AI..."}
+                                className="flex-1 bg-[#181822] border border-white/15 rounded-full px-4 py-2 text-xs text-white placeholder:text-gray-500 focus:outline-none focus:border-accent"
+                            />
+                            <button
+                                onClick={handleSend}
+                                disabled={isLoading || !input.trim()}
+                                className="w-8 h-8 rounded-full bg-accent text-black flex items-center justify-center hover:bg-cyan-300 transition-colors disabled:opacity-40 disabled:hover:bg-accent"
+                            >
+                                <Send size={14} />
+                            </button>
                         </div>
                     </motion.div>
                 )}
             </AnimatePresence>
 
+            {/* Toggle Floating Button */}
             <motion.button
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => setIsOpen(!isOpen)}
-                className="fixed bottom-5 right-5 w-14 h-14 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full shadow-lg flex items-center justify-center z-50 group border border-white/20"
+                className="w-14 h-14 rounded-full bg-accent text-black flex items-center justify-center shadow-[0_0_30px_rgba(0,243,255,0.5)] border border-cyan-200 transition-all hover:bg-cyan-300 relative group"
             >
-                <div className="scale-75">
-                    <AnimatedAvatar />
-                </div>
+                <div className="absolute inset-0 rounded-full bg-accent animate-ping opacity-25"></div>
+                {isOpen ? <X size={24} /> : <Bot size={26} />}
             </motion.button>
-        </>
+        </div>
     );
-};
-
-export default ChatWidget;
+}

@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
-import { Outfit, Space_Grotesk } from "next/font/google";
+import { Outfit, Space_Grotesk, Hind_Siliguri } from "next/font/google";
 import "./globals.css";
 import LenisScroll from "@/components/LenisScroll";
 import NoiseOverlay from "@/components/NoiseOverlay";
 import CustomCursor from "@/components/CustomCursor";
 import Navbar from "@/components/Navbar";
 import ChatWidget from "@/components/ChatWidget";
+import Interactive3DBackground from "@/components/Interactive3DBackground";
+import { AuthProvider } from "@/context/AuthContext";
+import { LanguageProvider } from "@/context/LanguageContext";
 
 const outfit = Outfit({
   subsets: ["latin"],
@@ -19,14 +22,20 @@ const spaceGrotesk = Space_Grotesk({
   weight: ["300", "400", "500", "600", "700"],
 });
 
+const hindSiliguri = Hind_Siliguri({
+  subsets: ["bengali", "latin"],
+  variable: "--font-bengali",
+  weight: ["300", "400", "500", "600", "700"],
+});
+
 export const metadata: Metadata = {
   metadataBase: new URL('https://ovisoft.tech'),
   title: {
     default: "OviSoft | Premium Digital Agency & Software Solutions",
     template: "%s | OviSoft"
   },
-  description: "OviSoft is a leading Digital Agency specializing in High-Performance Web Development, Mobile Apps, and Artificial Intelligence Solutions. Transform your business with us.",
-  keywords: ["OviSoft", "Digital Agency", "Software Company", "Web Development", "App Development", "AI Solutions", "OviSoft Tech", "IT Firm"],
+  description: "OviSoft is a leading Digital Agency in Dhaka specializing in High-Performance Web Development, E-Commerce, Mobile Apps, and AI Automation.",
+  keywords: ["OviSoft", "Digital Agency", "Software Company", "Web Development Dhaka", "E-Commerce Website", "Proxmox Hosting", "AI Solutions"],
   authors: [{ name: "OviSoft Team" }],
   creator: "OviSoft",
   openGraph: {
@@ -34,25 +43,11 @@ export const metadata: Metadata = {
     description: "Building the future with Web, Mobile, and AI technologies.",
     url: "https://ovisoft.tech",
     siteName: "OviSoft Digital Agency",
-    images: [
-      {
-        url: "/ovi.jpg",
-        alt: "OviSoft Digital Agency",
-      },
-    ],
+    images: [{ url: "/ovi.jpg", alt: "OviSoft Digital Agency" }],
     locale: "en_US",
     type: "website",
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
-  verification: {
-    google: "nNSYbjDsHSzpULb654G3C2ZDsZjSZ1U5TEMUjKfYIuo",
-  },
 };
-
-import { AuthProvider } from "@/context/AuthContext";
 
 export default function RootLayout({
   children,
@@ -63,15 +58,18 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         suppressHydrationWarning={true}
-        className={`${outfit.variable} ${spaceGrotesk.variable} antialiased cursor-none`}
+        className={`${outfit.variable} ${spaceGrotesk.variable} ${hindSiliguri.variable} antialiased cursor-none font-body`}
       >
         <AuthProvider>
-          <NoiseOverlay />
-          <CustomCursor />
-          <LenisScroll />
-          <Navbar />
-          <ChatWidget />
-          {children}
+          <LanguageProvider>
+            <Interactive3DBackground />
+            <NoiseOverlay />
+            <CustomCursor />
+            <LenisScroll />
+            <Navbar />
+            <ChatWidget />
+            {children}
+          </LanguageProvider>
         </AuthProvider>
       </body>
     </html>

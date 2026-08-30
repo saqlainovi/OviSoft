@@ -8,8 +8,8 @@
   --color-glass-bg: var(--glass-bg);
   --color-glass-border: var(--glass-border);
 
-  --font-heading: var(--font-outfit);
-  --font-body: var(--font-space-grotesk);
+  --font-heading: var(--font-outfit), var(--font-bengali), sans-serif;
+  --font-body: var(--font-space-grotesk), var(--font-bengali), sans-serif;
 }
 
 :root {

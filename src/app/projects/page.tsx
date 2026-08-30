@@ -1,15 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowUpRight, FolderGit2, Sparkles, ArrowRight } from "lucide-react";
-import { useEffect, useRef } from "react";
-import gsap from "gsap";
+import { ArrowLeft, ArrowUpRight, FolderGit2, Sparkles, Lock, Star } from "lucide-react";
 import { useLanguage } from "@/context/LanguageContext";
 
 const projects = [
     {
         slug: "parkinsons-disease-analysis",
-        title: "Parkinson's Disease Analysis",
+        title: "Parkinson's Disease AI Analysis",
         descriptionEn: "Deep learning pipeline for multiclass neuroimaging classification using PyTorch & Explainable AI.",
         descriptionBn: "নিউরোইমেজিং ডেটা ও এক্সএআই ব্যবহার করে ডিপ লার্নিং পার্কিনসন্স ডিজিজ ক্লাসিফিকেশন পাইপলাইন।",
         tags: ["Python", "Deep Learning", "XAI"],
@@ -19,7 +17,7 @@ const projects = [
     },
     {
         slug: "facial-recognition-security-system",
-        title: "Facial Recognition System",
+        title: "Facial Recognition Security System",
         descriptionEn: "Sub-100ms real-time facial recognition authentication platform with 3D anti-spoofing liveness detection.",
         descriptionBn: "উচ্চ ক্ষমতাসম্পন্ন ফেসিয়াল রিকগনিশন ও ৩ডি অ্যান্টি-স্পুফিং সিকিউরিটি অথেন্টিকেশন প্ল্যাটফর্ম।",
         tags: ["Computer Vision", "FastAPI", "Security"],
@@ -69,92 +67,56 @@ const projects = [
     },
 ];
 
-export default function Work() {
+export default function ProjectsListingPage() {
     const { language } = useLanguage();
-    const cardsRef = useRef<(HTMLAnchorElement | null)[]>([]);
-
-    useEffect(() => {
-        const handleMouseMove = (e: MouseEvent, card: HTMLElement) => {
-            const rect = card.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-
-            const rotateX = ((y - centerY) / centerY) * -10;
-            const rotateY = ((x - centerX) / centerX) * 10;
-
-            gsap.to(card, {
-                rotationX: rotateX,
-                rotationY: rotateY,
-                transformPerspective: 1000,
-                duration: 0.3,
-                ease: "power2.out"
-            });
-        };
-
-        const handleMouseLeave = (card: HTMLElement) => {
-            gsap.to(card, {
-                rotationX: 0,
-                rotationY: 0,
-                duration: 0.6,
-                ease: "elastic.out(1, 0.4)"
-            });
-        };
-
-        cardsRef.current.forEach(card => {
-            if (!card) return;
-            const moveHandler = (e: MouseEvent) => handleMouseMove(e, card);
-            const leaveHandler = () => handleMouseLeave(card);
-
-            card.addEventListener("mousemove", moveHandler);
-            card.addEventListener("mouseleave", leaveHandler);
-        });
-    }, []);
 
     return (
-        <section id="work" className="py-32 bg-background relative px-6 overflow-hidden">
-            {/* Background Glow */}
-            <div className="absolute top-1/3 right-0 w-96 h-96 bg-accent/10 rounded-full filter blur-[140px] pointer-events-none"></div>
+        <main className="min-h-screen bg-background text-foreground py-24 px-6 relative overflow-hidden">
+            {/* Ambient Background Glows */}
+            <div className="absolute top-1/4 left-1/3 w-[500px] h-[500px] bg-primary/10 rounded-full filter blur-[150px] pointer-events-none"></div>
 
-            <div className="container mx-auto relative z-10">
-                <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
-                    <div>
-                        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent/10 border border-accent/30 text-accent text-xs font-bold uppercase tracking-widest mb-4">
-                            <Sparkles size={14} />
-                            <span>{language === "bn" ? "বাস্তবায়িত কাজসমূহ" : "Selected Works"}</span>
-                        </div>
-                        <h2 className="font-heading text-4xl sm:text-6xl md:text-7xl font-black bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-200 to-gray-500">
-                            {language === "bn" ? "নির্বাচিত প্রজেক্টসমূহ" : "Featured Engineering"}
-                        </h2>
+            <div className="container mx-auto max-w-6xl relative z-10">
+                {/* Back to Home */}
+                <Link
+                    href="/"
+                    className="inline-flex items-center gap-2 text-gray-400 hover:text-accent font-semibold text-sm mb-12 transition-colors group"
+                >
+                    <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+                    <span>{language === "bn" ? "হোমে ফিরে যান" : "Back to Home"}</span>
+                </Link>
+
+                {/* Header */}
+                <div className="max-w-3xl mb-16">
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent/10 border border-accent/30 text-accent text-xs font-bold uppercase tracking-widest mb-6">
+                        <Sparkles size={14} />
+                        <span>{language === "bn" ? "ওভিসফট ইঞ্জিনিয়ারিং পোর্টফোলিও" : "Selected Engineering Works"}</span>
                     </div>
-
-                    <Link
-                        href="/projects"
-                        className="inline-flex items-center gap-2 text-accent hover:text-cyan-300 font-bold text-xs uppercase tracking-widest group"
-                    >
-                        <span>{language === "bn" ? "সকল প্রজেক্ট দেখুন" : "View All Case Studies"}</span>
-                        <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                    </Link>
+                    <h1 className="font-heading text-4xl sm:text-6xl font-black text-white mb-6">
+                        {language === "bn"
+                            ? "বাস্তবায়িত সফটওয়্যার ও গবেষণা প্রজেক্ট"
+                            : "Engineering Case Studies & Products"}
+                    </h1>
+                    <p className="text-gray-400 text-lg leading-relaxed font-light">
+                        {language === "bn"
+                            ? "আমাদের তৈরি করা অত্যাধুনিক ওয়েব প্ল্যাটফর্ম, এআই সিস্টেম ও ক্লাউড আর্কিটেকচারের কেস স্টাডিজ।"
+                            : "Explore our real-world software platforms, computer vision engines, and high-concurrency systems."}
+                    </p>
                 </div>
 
-                {/* Original Aspect-[4/5] Dynamic Cards Grid */}
+                {/* Projects Grid (Original Aspect-[4/5] Design) */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {projects.map((project, i) => (
                         <Link
                             key={i}
                             href={`/projects/${project.slug}`}
-                            ref={el => { if (el) cardsRef.current[i] = el }}
-                            style={{ transformStyle: "preserve-3d" }}
-                            className="group relative rounded-3xl overflow-hidden aspect-[4/5] border border-white/10 hover:border-accent/50 bg-[#0a0a0f] shadow-2xl transition-all duration-300 flex flex-col justify-between p-8"
+                            className="group relative rounded-3xl overflow-hidden aspect-[4/5] border border-white/10 hover:border-accent/50 bg-[#0d0d12] shadow-2xl transition-all duration-500 hover:-translate-y-2 flex flex-col justify-between p-8"
                         >
                             {/* Background Gradient */}
                             <div className={`absolute inset-0 bg-gradient-to-br ${project.color} opacity-40 group-hover:opacity-75 transition-opacity duration-500`}></div>
 
-                            {/* Top Row Icons */}
+                            {/* Top Icons */}
                             <div className="relative z-10 flex justify-between items-start">
-                                <div className="p-3.5 bg-white/10 backdrop-blur-md rounded-2xl border border-white/15 text-accent shadow-lg group-hover:scale-110 transition-transform">
+                                <div className="p-3 bg-white/10 backdrop-blur-md rounded-2xl border border-white/15 text-accent shadow-lg group-hover:scale-110 transition-transform">
                                     <FolderGit2 size={22} />
                                 </div>
                                 <div className="p-3 bg-accent/10 text-accent group-hover:bg-accent group-hover:text-black rounded-2xl transition-all">
@@ -186,17 +148,17 @@ export default function Work() {
                                 <div className="flex items-center justify-between text-xs text-accent font-bold uppercase tracking-wider pt-3 border-t border-white/10">
                                     <span>{project.stats}</span>
                                     <span className="flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-                                        {language === "bn" ? "ডিটেইলস পড়ুন" : "Explore Study"} →
+                                        {language === "bn" ? "কেস স্টাডি দেখুন" : "View Case Study"} →
                                     </span>
                                 </div>
                             </div>
 
-                            {/* Moving Shine Reflection */}
+                            {/* Moving Shine Effect */}
                             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out pointer-events-none"></div>
                         </Link>
                     ))}
                 </div>
             </div>
-        </section>
+        </main>
     );
 }

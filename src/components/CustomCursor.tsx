@@ -1,110 +1,125 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { usePathname } from "next/navigation";
 
 export default function CustomCursor() {
-    const cursorRef = useRef<HTMLDivElement>(null);
-    const followerRef = useRef<HTMLDivElement>(null);
+    const cursorDotRef = useRef<HTMLDivElement>(null);
+    const cursorFollowerRef = useRef<HTMLDivElement>(null);
+    const [isHovered, setIsHovered] = useState(false);
+    const [isClicked, setIsClicked] = useState(false);
     const pathname = usePathname();
 
     useEffect(() => {
-        // 1. Move Cursor
-        const moveCursor = (e: MouseEvent) => {
-            gsap.to(cursorRef.current, {
+        const dot = cursorDotRef.current;
+        const follower = cursorFollowerRef.current;
+        if (!dot || !follower) return;
+
+        // Smooth mouse move with high precision
+        const onMouseMove = (e: MouseEvent) => {
+            gsap.to(dot, {
                 x: e.clientX,
                 y: e.clientY,
-                duration: 0,
+                duration: 0.02,
+                ease: "none"
             });
 
-            gsap.to(followerRef.current, {
+            gsap.to(follower, {
                 x: e.clientX,
                 y: e.clientY,
-                duration: 0.1,
+                duration: 0.15,
+                ease: "power2.out"
             });
         };
 
-        window.addEventListener("mousemove", moveCursor);
-
-        // 2. Magnetic Buttons using Event Delegation
-        // This allows it to work with dynamically added elements (like Next.js navigations)
-        // We track mouse movement over specific elements
-
-        const handleMagneticMove = (e: MouseEvent) => {
-            const target = (e.target as HTMLElement).closest(".magnetic-btn");
-            if (target) {
-                const rect = target.getBoundingClientRect();
-                const x = e.clientX - rect.left - rect.width / 2;
-                const y = e.clientY - rect.top - rect.height / 2;
-
-                gsap.to(target, {
-                    x: x * 0.3,
-                    y: y * 0.3,
-                    duration: 0.3,
-                    ease: "power2.out",
-                });
-
-                gsap.to(followerRef.current, { scale: 2, duration: 0.2 });
-            } else {
-                gsap.to(followerRef.current, { scale: 1, duration: 0.2 });
-            }
+        // Click Ripple Physics
+        const onMouseDown = () => {
+            setIsClicked(true);
+            gsap.to(follower, {
+                scale: 0.75,
+                borderColor: "#00f3ff",
+                duration: 0.1
+            });
         };
 
-        // We need to reset position when leaving
-        // Event delegation for 'mouseleave' is tricky because it doesn't bubble like 'mouseout'
-        // But 'mouseout' fires too often.
-        // Instead, we can just detect if we are NOT on a magnetic btn in the move handler above 
-        // and reset all ".magnetic-btn" positions? No, that's heavy.
-        // 
-        // Best approach for React + Global Magnetic:
-        // Add listeners to elements when page changes.
+        const onMouseUp = () => {
+            setIsClicked(false);
+            gsap.to(follower, {
+                scale: isHovered ? 2.2 : 1,
+                borderColor: "rgba(255, 255, 255, 0.4)",
+                duration: 0.3,
+                ease: "elastic.out(1, 0.4)"
+            });
+        };
 
-        // Cleanup previous listeners if any (simple approach)
-        const attachListeners = () => {
-            const btns = document.querySelectorAll(".magnetic-btn");
-            btns.forEach((btn) => {
-                // Remove old listener to avoid dupes? 
-                // Better to clone or use a flag. 
-                // For simplicity in this migration, we'll assume lightweight listeners.
+        window.addEventListener("mousemove", onMouseMove);
+        window.addEventListener("mousedown", onMouseDown);
+        window.addEventListener("mouseup", onMouseUp);
 
-                // Actually, let's use the 'mouseenter' / 'mouseleave' local approach for reset
-                btn.addEventListener("mouseleave", () => {
-                    gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.3)" });
-                    gsap.to(followerRef.current, { scale: 1, duration: 0.2 });
-                });
+        // Hover & Magnetic Detectors
+        const attachHoverListeners = () => {
+            const interactiveElements = document.querySelectorAll(
+                "a, button, input, select, textarea, [role='button'], .magnetic-btn, .group"
+            );
 
-                // We still need the move logic locally for that specific button to avoid conflict
-                btn.addEventListener("mousemove", (e: any) => {
-                    const rect = btn.getBoundingClientRect();
-                    const x = e.clientX - rect.left - rect.width / 2;
-                    const y = e.clientY - rect.top - rect.height / 2;
-
-                    gsap.to(btn, {
-                        x: x * 0.3,
-                        y: y * 0.3,
-                        duration: 0.3,
-                        ease: "power2.out",
+            interactiveElements.forEach((el) => {
+                el.addEventListener("mouseenter", () => {
+                    setIsHovered(true);
+                    gsap.to(follower, {
+                        scale: 2.2,
+                        backgroundColor: "rgba(0, 243, 255, 0.08)",
+                        borderColor: "#00f3ff",
+                        duration: 0.25
                     });
-                    gsap.to(followerRef.current, { scale: 2, duration: 0.2 });
+                    gsap.to(dot, {
+                        scale: 0.5,
+                        backgroundColor: "#00f3ff",
+                        duration: 0.2
+                    });
+                });
+
+                el.addEventListener("mouseleave", () => {
+                    setIsHovered(false);
+                    gsap.to(follower, {
+                        scale: 1,
+                        backgroundColor: "transparent",
+                        borderColor: "rgba(255, 255, 255, 0.4)",
+                        duration: 0.25
+                    });
+                    gsap.to(dot, {
+                        scale: 1,
+                        backgroundColor: "#00f3ff",
+                        duration: 0.2
+                    });
                 });
             });
         };
 
-        // Run on mount and path change
-        attachListeners();
-        // A small timeout to allow new DOM elements to paint
-        setTimeout(attachListeners, 500);
+        attachHoverListeners();
+        const timer = setTimeout(attachHoverListeners, 600);
 
         return () => {
-            window.removeEventListener("mousemove", moveCursor);
+            window.removeEventListener("mousemove", onMouseMove);
+            window.removeEventListener("mousedown", onMouseDown);
+            window.removeEventListener("mouseup", onMouseUp);
+            clearTimeout(timer);
         };
     }, [pathname]);
 
     return (
         <>
-            <div ref={cursorRef} className="cursor hidden md:block" />
-            <div ref={followerRef} className="cursor-follower hidden md:block" />
+            {/* Inner precise dot */}
+            <div
+                ref={cursorDotRef}
+                className="fixed top-0 left-0 w-2.5 h-2.5 bg-accent rounded-full pointer-events-none z-[99999] -translate-x-1/2 -translate-y-1/2 shadow-[0_0_12px_#00f3ff]"
+            />
+
+            {/* Outer smooth follower */}
+            <div
+                ref={cursorFollowerRef}
+                className="fixed top-0 left-0 w-9 h-9 rounded-full border border-white/40 pointer-events-none z-[99998] -translate-x-1/2 -translate-y-1/2 backdrop-blur-[1px] transition-colors"
+            />
         </>
     );
 }
