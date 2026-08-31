@@ -10,10 +10,10 @@ export default function PricingPage() {
 
     const faqs = [
         {
-            qEn: "What is included in the 1-Year Free Dedicated Cloud Hosting?",
-            qBn: "১ম বছরের ফ্রি ডেডিকেটেড ক্লাউড হোস্টিংয়ে কী কী অন্তর্ভুক্ত?",
-            aEn: "Every package comes hosted on our high-speed private cloud server node in Dhaka with 0.1s latency, automated SSL certificates, unlimited bandwidth, and daily database backups.",
-            aBn: "প্রতিটি প্যাকেজের সাথে ঢাকায় অবস্থিত আমাদের প্রাইভেট ক্লাউড সার্ভারে ফ্রি হোস্টিং দেওয়া হয়, যাতে রয়েছে ০.১ সেকেন্ড স্পিড, ফ্রি SSL ও প্রতিদিনের ডেটাবেজ ব্যাকআপ।"
+            qEn: "What is included in the 1-Year Free Cloud Hosting?",
+            qBn: "১ম বছরের ফ্রি ক্লাউড হোস্টিংয়ে কী কী অন্তর্ভুক্ত?",
+            aEn: "Every package includes 1st year free cloud hosting tailored to your scale (Shared Cloud for Starter, High-Speed Cloud for Business, SSD Node for E-Commerce, and Dedicated Private Node for Enterprise) with SSL certificates and automated backups.",
+            aBn: "প্রতিটি প্যাকেজের সাথে ১ম বছর ফ্রি ক্লাউড হোস্টিং দেওয়া হয় (স্টার্টারে শেয়ার্ড ক্লাউড, বিজনেসে হাই-স্পিড ক্লাউড, ই-কমার্সে SSD ক্লাউড নোড এবং এন্টারপ্রাইজে ডেডিকেটেড প্রাইভেট নোড), যাতে রয়েছে ফ্রি SSL ও ব্যাকআপ।"
         },
         {
             qEn: "How does the 50% Milestone Billing work?",
@@ -28,10 +28,10 @@ export default function PricingPage() {
             aBn: "হ্যাঁ, সম্পূর্ণ মডিউলার আর্কিটেকচার হওয়ায় যেকোনো সময় স্টার্টার থেকে ই-কমার্স বা এআই অটোমেশন প্যাকেজে আপগ্রেড করা যায়।"
         },
         {
-            qEn: "What does the 1-Year Full Technical Warranty cover?",
-            qBn: "১ বছরের ফ্রি টেকনিক্যাল ওয়ারেন্টির সুবিধা কী?",
-            aEn: "We provide 1 year of continuous bug fixes, security patch updates, server health monitoring, and priority SLA assistance with zero maintenance fees.",
-            aBn: "১ বছরের মধ্যে যেকোনো টেকনিক্যাল বাগ ফিক্সিং, সিকিউরিটি আপডেট এবং সার্ভার হেলথ মনিটরিং ওভিসফট টিম সম্পূর্ণ ফ্রিতে প্রদান করে।"
+            qEn: "What does the Technical Support & Warranty cover?",
+            qBn: "টেকনিক্যাল সাপোর্ট ও ওয়ারেন্টির সুবিধা কী?",
+            aEn: "We provide dedicated technical support, bug fixing, security patch updates, and server health monitoring according to your selected tier.",
+            aBn: "আপনার প্যাকেজ অনুযায়ী টেকনিক্যাল সাপোর্ট পিরিয়ডে যেকোনো টেকনিক্যাল বাগ ফিক্সিং, সিকিউরিটি আপডেট এবং সার্ভার মনিটরিং ওভিসফট টিম সম্পূর্ণ ফ্রিতে প্রদান করে।"
         }
     ];
 

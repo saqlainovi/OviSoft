@@ -75,8 +75,8 @@ export default function ChatWidget() {
             console.error("Local AI chat error:", err);
             // Graceful fallback response
             const fallback = language === 'bn'
-                ? "ওভিসফটে যোগাযোগ করার জন্য ধন্যবাদ। আমাদের স্টার্টার ওয়েবসাইট ৳৫,০০০ থেকে এবং ই-কমার্স ৳৩৫,০০০ থেকে শুরু। বিস্তারিত জানতে 'Start Project'-এ ক্লিক করুন।"
-                : "Thank you for reaching out to OviSoft.tech. Starter websites start from ৳5,000 and E-Commerce from ৳35,000 with 1st year free cloud hosting. Click 'Start Project' to connect with us!";
+                ? "ওভিসফটে যোগাযোগ করার জন্য ধন্যবাদ। আমাদের স্টার্টার ওয়েবসাইট ৳৬,০০০ থেকে এবং ই-কমার্স ৳৪২,০০০ থেকে শুরু। বিস্তারিত জানতে 'Start Project'-এ ক্লিক করুন।"
+                : "Thank you for reaching out to OviSoft.tech. Starter websites start from ৳6,000 and E-Commerce from ৳42,000 with 1st year free cloud hosting. Click 'Start Project' to connect with us!";
             setMessages(prev => [
                 ...prev,
                 { id: Date.now() + 1, text: fallback, sender: 'bot', engine: 'OviSoft Local Assistant' }
