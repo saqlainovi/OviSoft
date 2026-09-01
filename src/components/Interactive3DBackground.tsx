@@ -360,37 +360,6 @@ export default function Interactive3DBackground() {
                 ref={canvasRef}
                 className="fixed inset-0 pointer-events-none z-[1] opacity-70"
             />
-
-            {/* Interactive Cyber HUD Widget in Bottom-Left Corner */}
-            <div className="fixed bottom-6 left-6 z-[9999] hidden lg:flex items-center gap-3 glass px-4 py-2.5 rounded-2xl border border-white/10 bg-[#0a0a12]/80 backdrop-blur-xl shadow-2xl text-[11px] text-gray-300">
-                <div className="flex items-center gap-2 pr-3 border-r border-white/10">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    <span className="font-mono text-emerald-400 font-bold">GPU MATRIX ONLINE</span>
-                </div>
-
-                <div className="flex items-center gap-3 font-mono text-[10px] text-gray-400">
-                    <span>FPS: <strong className="text-white">{stats.fps}</strong></span>
-                    <span>LATENCY: <strong className="text-accent">0.12ms</strong></span>
-                    <span>NODES: <strong className="text-purple-400">{stats.nodes}</strong></span>
-                </div>
-
-                <button
-                    onClick={() => triggerShockwaveRef.current()}
-                    className="ml-2 px-3 py-1 rounded-lg bg-accent/15 hover:bg-accent text-accent hover:text-black font-bold uppercase tracking-wider text-[10px] transition-all flex items-center gap-1 shadow-[0_0_15px_rgba(0,243,255,0.2)]"
-                    title="Trigger Quantum Shockwave"
-                >
-                    <Zap size={11} />
-                    <span>Pulse</span>
-                </button>
-
-                <button
-                    onClick={() => changeThemeRef.current()}
-                    className="p-1 rounded-lg bg-white/5 hover:bg-white/15 text-gray-300 hover:text-white transition-colors"
-                    title="Change Cyber Aurora Theme"
-                >
-                    <RefreshCw size={12} />
-                </button>
-            </div>
         </>
     );
 }

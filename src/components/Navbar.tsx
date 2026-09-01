@@ -36,14 +36,12 @@ export default function Navbar() {
     const navItems = language === "bn" ? [
         { name: "হোম", href: "/" },
         { name: "সার্ভিস", href: "/services" },
-        { name: "প্যাকেজ", href: "/pricing" },
         { name: "প্রজেক্ট", href: "/projects" },
         { name: "ব্লগ", href: "/blog" },
         { name: "টিম", href: "/team" },
     ] : [
         { name: "Home", href: "/" },
         { name: "Services", href: "/services" },
-        { name: "Pricing", href: "/pricing" },
         { name: "Projects", href: "/projects" },
         { name: "Blog", href: "/blog" },
         { name: "Team", href: "/team" },

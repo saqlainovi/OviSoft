@@ -115,7 +115,6 @@ export default function Footer() {
                             {language === "bn" ? "প্রয়োজনীয় লিংক" : "Quick Links"}
                         </h5>
                         <ul className="space-y-2 text-xs font-semibold">
-                            <li><Link href="/#pricing" className="text-gray-400 hover:text-accent transition-colors">Pricing Packages</Link></li>
                             <li><Link href="/blog" className="text-gray-400 hover:text-accent transition-colors">Tech Blog & Insights</Link></li>
                             <li><Link href="/team" className="text-gray-400 hover:text-accent transition-colors">Leadership & Engineering Team</Link></li>
                             <li><Link href="/start-project" className="text-accent hover:text-cyan-300 transition-colors">Start Project Brief</Link></li>

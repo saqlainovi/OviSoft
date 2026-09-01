@@ -5,7 +5,6 @@ import TrustedPartners from "@/components/TrustedPartners";
 import Promotions from "@/components/Promotions";
 import About from "@/components/About";
 import Services from "@/components/Services";
-import Pricing from "@/components/Pricing";
 import Work from "@/components/Work";
 import BlogSection from "@/components/BlogSection";
 import ContactForm from "@/components/ContactForm";
@@ -27,8 +26,6 @@ export default function Home() {
       <About />
 
       <Services />
-
-      <Pricing />
 
       <Work />
 

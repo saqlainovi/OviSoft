@@ -67,6 +67,36 @@ const projects = [
         color: "from-slate-900 via-gray-950 to-black",
         badge: "Security"
     },
+    {
+        slug: "ai-chatbot-automation",
+        title: "AI Customer Support Agent",
+        descriptionEn: "NLP-powered intelligent support agent capable of resolving customer queries instantly using fine-tuned LLMs.",
+        descriptionBn: "ফাইন-টিউনড এলএলএম ব্যবহার করে ইনস্ট্যান্ট কাস্টমার সাপোর্ট প্রদানকারী এআই চ্যাটবট।",
+        tags: ["OpenAI", "Next.js", "Python"],
+        stats: "AI Automation",
+        color: "from-blue-900 via-indigo-900 to-black",
+        badge: "AI / ML"
+    },
+    {
+        slug: "real-estate-crm",
+        title: "Real Estate ERP & CRM",
+        descriptionEn: "Complete property management CRM with automated lead scoring, tenant portals, and payment tracking.",
+        descriptionBn: "অটোমেটেড লিড স্কোরিং এবং প্রপার্টি ম্যানেজমেন্টের জন্য রিয়েল এস্টেট সিআরএম ও ইআরপি।",
+        tags: ["Laravel", "Vue.js", "MySQL"],
+        stats: "Enterprise CRM",
+        color: "from-green-900 via-emerald-950 to-black",
+        badge: "Web App"
+    },
+    {
+        slug: "fintech-payment-gateway",
+        title: "FinTech Payment Gateway",
+        descriptionEn: "Custom payment processing API gateway supporting high-concurrency transactions and fraud detection.",
+        descriptionBn: "উচ্চ-নিরাপত্তাসম্পন্ন কাস্টম পেমেন্ট প্রসেসিং এপিআই গেটওয়ে ও ফ্রড ডিটেকশন সিস্টেম।",
+        tags: ["Go", "Microservices", "Redis"],
+        stats: "FinTech",
+        color: "from-red-950 via-rose-950 to-black",
+        badge: "System"
+    },
 ];
 
 export default function Work() {
@@ -147,7 +177,7 @@ export default function Work() {
                             href={`/projects/${project.slug}`}
                             ref={el => { if (el) cardsRef.current[i] = el }}
                             style={{ transformStyle: "preserve-3d" }}
-                            className="group relative rounded-3xl overflow-hidden aspect-[4/5] border border-white/10 hover:border-accent/50 bg-[#0a0a0f] shadow-2xl transition-all duration-300 flex flex-col justify-between p-8"
+                            className="group relative rounded-3xl overflow-hidden aspect-[4/5] magnetic-btn border border-white/10 hover:border-accent/50 bg-[#0a0a0f] shadow-2xl transition-all duration-300 flex flex-col justify-between p-8"
                         >
                             {/* Background Gradient */}
                             <div className={`absolute inset-0 bg-gradient-to-br ${project.color} opacity-40 group-hover:opacity-75 transition-opacity duration-500`}></div>
