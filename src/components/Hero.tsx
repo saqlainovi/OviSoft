@@ -4,13 +4,31 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import Link from "next/link";
 import { ArrowUpRight, Sparkles, Zap, Shield, Globe } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/context/LanguageContext";
+
+const phrasesEn = [
+    { prefix: "We Craft", highlight: "Digital Dreams." },
+    { prefix: "We Build", highlight: "Scalable Platforms." },
+    { prefix: "We Design", highlight: "Future Experiences." },
+    { prefix: "We Engineer", highlight: "Intelligent AI Systems." },
+    { prefix: "We Accelerate", highlight: "Bold Innovations." },
+];
+
+const phrasesBn = [
+    { prefix: "আমরা বানাই", highlight: "ডিজিটাল স্বপ্ন।" },
+    { prefix: "আমরা তৈরি করি", highlight: "হাই-পারফরম্যান্স সফটওয়্যার।" },
+    { prefix: "আমরা গড়ি", highlight: "ভবিষ্যতের ওয়েব এক্সপেরিয়েন্স।" },
+    { prefix: "আমরা এনে দিই", highlight: "স্মার্ট এআই অটোমেশন।" },
+    { prefix: "আমরা বাস্তবায়ন করি", highlight: "আপনার উদ্ভাবনী আইডিয়া।" },
+];
 
 export default function Hero() {
     const { language } = useLanguage();
     const heroRef = useRef<HTMLElement>(null);
-    const titleRef = useRef<HTMLHeadingElement>(null);
-    const floatingBadgesRef = useRef<HTMLDivElement>(null);
+    const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
+
+    const phrases = language === "bn" ? phrasesBn : phrasesEn;
 
     const videos = [
         "/videos/AI_Brain_Video_Generation.mp4",
@@ -20,29 +38,24 @@ export default function Hero() {
 
     const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
 
+    // Dynamic rotating typography timer
     useEffect(() => {
-        const tl = gsap.timeline();
+        const textInterval = setInterval(() => {
+            setCurrentPhraseIndex((prev) => (prev + 1) % phrases.length);
+        }, 3200);
+        return () => clearInterval(textInterval);
+    }, [phrases.length]);
 
-        // Stagger Title Reveal
-        if (titleRef.current) {
-            gsap.set(titleRef.current.children, { y: "110%", opacity: 0 });
-            gsap.set(".hero-fade", { opacity: 0, y: 30 });
-
-            tl.to(titleRef.current.children, {
-                y: "0%",
-                opacity: 1,
-                duration: 1.2,
-                stagger: 0.15,
-                ease: "power4.out"
-            })
-            .to(".hero-fade", {
-                opacity: 1,
-                y: 0,
-                duration: 0.8,
-                stagger: 0.1,
-                ease: "power3.out"
-            }, "-=0.6");
-        }
+    useEffect(() => {
+        gsap.set(".hero-fade", { opacity: 0, y: 30 });
+        gsap.to(".hero-fade", {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            stagger: 0.12,
+            ease: "power3.out",
+            delay: 0.2
+        });
 
         // Mouse Parallax on Hero elements
         const handleHeroMouseMove = (e: MouseEvent) => {
@@ -53,29 +66,29 @@ export default function Hero() {
             const y = (e.clientY - rect.top) / rect.height - 0.5;
 
             gsap.to(".hero-title-layer", {
-                x: x * 20,
-                y: y * 20,
+                x: x * 15,
+                y: y * 15,
                 duration: 0.5,
                 ease: "power1.out"
             });
 
             gsap.to(".hero-badge-1", {
-                x: x * -35,
-                y: y * -35,
+                x: x * -30,
+                y: y * -30,
                 duration: 0.6,
                 ease: "power1.out"
             });
 
             gsap.to(".hero-badge-2", {
-                x: x * 40,
-                y: y * 30,
+                x: x * 35,
+                y: y * 25,
                 duration: 0.7,
                 ease: "power1.out"
             });
 
             gsap.to(".hero-badge-3", {
-                x: x * -25,
-                y: y * 35,
+                x: x * -20,
+                y: y * 30,
                 duration: 0.6,
                 ease: "power1.out"
             });
@@ -99,13 +112,15 @@ export default function Hero() {
         return () => clearInterval(interval);
     }, [videos.length]);
 
+    const activePhrase = phrases[currentPhraseIndex % phrases.length];
+
     return (
         <section
             ref={heroRef}
             id="home"
             className="relative min-h-screen w-full flex items-center justify-center overflow-hidden pt-20"
         >
-            {/* Background Video Layer with Smooth Blend */}
+            {/* Background Video Layer with Smooth Blend & Continuous Motion */}
             {videos.map((src, index) => (
                 <div
                     key={src}
@@ -113,21 +128,25 @@ export default function Hero() {
                         index === currentVideoIndex ? "opacity-100" : "opacity-0"
                     }`}
                 >
-                    <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-background z-10" />
+                    <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/55 to-background z-10" />
                     <video
                         autoPlay
                         muted
                         loop
                         playsInline
-                        className="w-full h-full object-cover opacity-45 scale-105"
+                        className="w-full h-full object-cover opacity-50 scale-105"
                     >
                         <source src={src} type="video/mp4" />
                     </video>
                 </div>
             ))}
 
+            {/* Continuous Radial Ambient Glow Pulses */}
+            <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-accent/15 rounded-full filter blur-[150px] pointer-events-none animate-pulse duration-1000"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-[450px] h-[450px] bg-purple-600/15 rounded-full filter blur-[160px] pointer-events-none animate-pulse duration-700"></div>
+
             {/* Floating 3D Interactive Badges */}
-            <div ref={floatingBadgesRef} className="absolute inset-0 pointer-events-none z-20 overflow-hidden">
+            <div className="absolute inset-0 pointer-events-none z-20 overflow-hidden">
                 {/* Badge 1 */}
                 <div className="hero-badge-1 absolute top-1/4 right-[10%] hidden md:flex items-center gap-2.5 px-4 py-2 rounded-2xl glass border border-accent/40 text-accent text-xs font-bold shadow-[0_0_25px_rgba(0,243,255,0.2)] backdrop-blur-xl">
                     <Zap size={14} className="animate-pulse" />
@@ -156,22 +175,26 @@ export default function Hero() {
                         <span>{language === "bn" ? "প্রিমিয়াম ডিজিটাল এজেন্সি • ঢাকা" : "Next-Gen Digital Agency • Dhaka"}</span>
                     </div>
 
-                    {/* Main Headline with 3D Parallax */}
-                    <h1
-                        ref={titleRef}
-                        className="hero-title-layer font-heading font-black text-5xl sm:text-7xl md:text-8xl leading-[1.05] tracking-tight mb-8"
-                    >
-                        <div className="overflow-hidden">
-                            <span className="inline-block bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-100 to-gray-400">
-                                {language === "bn" ? "আমরা তৈরি করি" : "We Engineer"}
-                            </span>
-                        </div>
-                        <div className="overflow-hidden">
-                            <span className="inline-block text-accent drop-shadow-[0_0_35px_rgba(0,243,255,0.4)]">
-                                {language === "bn" ? "ভবিষ্যতের সফটওয়্যার" : "Digital Excellence"}
-                            </span>
-                        </div>
-                    </h1>
+                    {/* Main Dynamic Headline with Fluid Motion Flip */}
+                    <div className="hero-title-layer min-h-[160px] sm:min-h-[220px] md:min-h-[260px] mb-6">
+                        <AnimatePresence mode="wait">
+                            <motion.h1
+                                key={currentPhraseIndex + language}
+                                initial={{ opacity: 0, y: 35, filter: "blur(8px)" }}
+                                animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                                exit={{ opacity: 0, y: -35, filter: "blur(8px)" }}
+                                transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                                className="font-heading font-black text-5xl sm:text-7xl md:text-8xl leading-[1.08] tracking-tight"
+                            >
+                                <span className="block bg-clip-text text-transparent bg-gradient-to-r from-white via-gray-100 to-gray-400">
+                                    {activePhrase.prefix}
+                                </span>
+                                <span className="block text-accent drop-shadow-[0_0_35px_rgba(0,243,255,0.45)] mt-1">
+                                    {activePhrase.highlight}
+                                </span>
+                            </motion.h1>
+                        </AnimatePresence>
+                    </div>
 
                     <p className="hero-fade text-lg sm:text-2xl text-gray-300 max-w-2xl font-light leading-relaxed mb-12">
                         {language === "bn"
@@ -182,10 +205,10 @@ export default function Hero() {
                     {/* Action Buttons */}
                     <div className="hero-fade flex flex-wrap gap-5 justify-center md:justify-start">
                         <Link
-                            href="/#pricing"
+                            href="/services"
                             className="group relative px-8 py-4 bg-accent text-black rounded-full font-bold uppercase text-xs tracking-widest overflow-hidden transition-all duration-300 hover:bg-cyan-300 shadow-[0_0_30px_rgba(0,243,255,0.4)] hover:shadow-cyan-400/60 flex items-center gap-2"
                         >
-                            <span>{language === "bn" ? "প্যাকেজ দেখুন" : "Explore Packages"}</span>
+                            <span>{language === "bn" ? "সার্ভিসসমূহ দেখুন" : "Explore Services"}</span>
                             <ArrowUpRight size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                         </Link>
 
