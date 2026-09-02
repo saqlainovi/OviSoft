@@ -54,8 +54,15 @@ export default function Navbar() {
             }`}
         >
             {/* Logo */}
-            <Link href="/" className="font-heading text-2xl font-black tracking-wider cursor-none">
-                OviSoft<span className="text-accent text-4xl leading-none">.</span>
+            <Link href="/" className="flex items-center gap-2.5 font-heading text-2xl font-black tracking-wider cursor-none group">
+                <img
+                    src="/logo.png"
+                    alt="OviSoft Logo"
+                    className="w-8 h-8 md:w-9 md:h-9 object-contain rounded-full group-hover:scale-110 transition-transform duration-300 drop-shadow-[0_0_15px_rgba(0,122,255,0.5)]"
+                />
+                <span className="flex items-center">
+                    OviSoft<span className="text-accent text-4xl leading-none">.</span>
+                </span>
             </Link>
 
             {/* Desktop Menu */}

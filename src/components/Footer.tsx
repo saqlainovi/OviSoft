@@ -72,7 +72,16 @@ export default function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-16 border-b border-white/10">
                     {/* Col 1: About OviSoft */}
                     <div className="space-y-4">
-                        <h4 className="font-heading text-2xl font-black text-white">OviSoft<span className="text-accent">.tech</span></h4>
+                        <div className="flex items-center gap-2.5">
+                            <img
+                                src="/logo.png"
+                                alt="OviSoft Logo"
+                                className="w-8 h-8 object-contain rounded-full drop-shadow-[0_0_12px_rgba(0,122,255,0.4)]"
+                            />
+                            <h4 className="font-heading text-2xl font-black text-white">
+                                OviSoft<span className="text-accent">.tech</span>
+                            </h4>
+                        </div>
                         <p className="text-gray-400 text-xs leading-relaxed">
                             {language === "bn"
                                 ? "শীর্ষস্থানীয় ডিজিটাল এজেন্সি ও ক্লাউড সল্যুশনস কোম্পানি। আধুনিক Next.js 15 আর্কিটেকচার, ই-কমার্স ও এআই অটোমেশন।"

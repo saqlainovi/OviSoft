@@ -38,6 +38,11 @@ export const metadata: Metadata = {
   keywords: ["OviSoft", "Digital Agency", "Software Company", "Web Development Dhaka", "E-Commerce Website", "Proxmox Hosting", "AI Solutions"],
   authors: [{ name: "OviSoft Team" }],
   creator: "OviSoft",
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
   openGraph: {
     title: "OviSoft | Premium Digital Agency",
     description: "Building the future with Web, Mobile, and AI technologies.",

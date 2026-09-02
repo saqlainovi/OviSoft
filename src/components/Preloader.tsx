@@ -36,8 +36,13 @@ export default function Preloader() {
 
     return (
         <div ref={preloaderRef} className="fixed inset-0 bg-black z-[99999] flex flex-col justify-center items-center preloader">
-            <div className="overflow-hidden mb-4">
-                <div className="loader-text font-heading text-6xl font-black tracking-widest text-accent opacity-0 translate-y-5">
+            <div className="overflow-hidden mb-4 flex flex-col items-center gap-3">
+                <img
+                    src="/logo.png"
+                    alt="OviSoft Logo"
+                    className="w-16 h-16 object-contain rounded-full animate-pulse drop-shadow-[0_0_25px_rgba(0,122,255,0.6)]"
+                />
+                <div className="loader-text font-heading text-4xl sm:text-6xl font-black tracking-widest text-accent opacity-0 translate-y-5">
                     OviSoft
                 </div>
             </div>

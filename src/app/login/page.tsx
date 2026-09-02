@@ -37,7 +37,8 @@ export default function Login() {
                 </Link>
 
                 <div className="glass p-10 rounded-3xl border border-white/10 shadow-2xl backdrop-blur-xl">
-                    <div className="text-center mb-8">
+                    <div className="text-center mb-8 flex flex-col items-center">
+                        <img src="/logo.png" alt="OviSoft" className="w-12 h-12 object-contain rounded-full mb-3 drop-shadow-[0_0_15px_rgba(0,122,255,0.5)]" />
                         <h1 className="font-heading text-4xl font-bold mb-2">Welcome Back</h1>
                         <p className="text-gray-400">Sign in to manage your projects</p>
                     </div>
