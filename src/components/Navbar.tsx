@@ -69,23 +69,17 @@ export default function Navbar() {
                                 : "bg-[#060a14]/60 border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.3)] backdrop-blur-xl"
                         }`}
                     >
-                        {/* 1. Left: High-Impact Brand Identity & Reactive Logo */}
+                        {/* 1. Left: High-Impact Brand Identity & Pure Untouched HDR Logo */}
                         <Link
                             href="/"
                             className="flex items-center gap-3 sm:gap-3.5 group select-none relative"
                         >
-                            {/* Illuminated Cyber Glass Bezel */}
-                            <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full p-[2px] bg-gradient-to-tr from-accent via-[#007aff] to-[#5d3fd3] shadow-[0_0_25px_rgba(0,122,255,0.5)] group-hover:shadow-[0_0_35px_rgba(0,243,255,0.8)] group-hover:scale-105 transition-all duration-500">
-                                <div className="w-full h-full rounded-full bg-[#040814] flex items-center justify-center p-1.5 overflow-hidden relative">
-                                    <img
-                                        src="/logo.png"
-                                        alt="OviSoft"
-                                        className="w-full h-full object-contain select-none group-hover:scale-110 transition-transform duration-500 drop-shadow-[0_0_10px_rgba(0,243,255,0.7)]"
-                                    />
-                                    {/* Shimmer Light Reflection Sweep */}
-                                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/80 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out pointer-events-none" />
-                                </div>
-                            </div>
+                            {/* Pure Untouched Original Logo with HDR Glow */}
+                            <img
+                                src="/logo.png"
+                                alt="OviSoft"
+                                className="w-11 h-11 sm:w-14 sm:h-14 object-contain select-none filter contrast-125 saturate-125 drop-shadow-[0_0_22px_rgba(0,122,255,0.8)] group-hover:drop-shadow-[0_0_32px_rgba(0,243,255,1)] group-hover:scale-108 transition-all duration-300"
+                            />
 
                             <div className="flex flex-col">
                                 <span className="font-heading font-black text-xl sm:text-2xl tracking-wider text-white flex items-center leading-none group-hover:text-cyan-100 transition-colors">

@@ -67,7 +67,6 @@ export default function RootLayout({
       >
         <AuthProvider>
           <LanguageProvider>
-            <Interactive3DBackground />
             <NoiseOverlay />
             <CustomCursor />
             <LenisScroll />

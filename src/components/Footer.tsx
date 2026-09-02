@@ -72,11 +72,11 @@ export default function Footer() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 pb-16 border-b border-white/10">
                     {/* Col 1: About OviSoft */}
                     <div className="space-y-4">
-                        <div className="flex items-center gap-2.5">
+                        <div className="flex items-center gap-3">
                             <img
                                 src="/logo.png"
-                                alt="OviSoft Logo"
-                                className="w-8 h-8 object-contain rounded-full drop-shadow-[0_0_12px_rgba(0,122,255,0.4)]"
+                                alt="OviSoft"
+                                className="w-10 h-10 sm:w-12 sm:h-12 object-contain select-none filter contrast-125 saturate-125 drop-shadow-[0_0_20px_rgba(0,122,255,0.7)]"
                             />
                             <h4 className="font-heading text-2xl font-black text-white">
                                 OviSoft<span className="text-accent">.tech</span>
