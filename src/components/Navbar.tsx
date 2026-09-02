@@ -54,12 +54,16 @@ export default function Navbar() {
             }`}
         >
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2.5 font-heading text-2xl font-black tracking-wider cursor-none group">
-                <img
-                    src="/logo.png"
-                    alt="OviSoft Logo"
-                    className="w-8 h-8 md:w-9 md:h-9 object-contain rounded-full group-hover:scale-110 transition-transform duration-300 drop-shadow-[0_0_15px_rgba(0,122,255,0.5)]"
-                />
+            <Link href="/" className="flex items-center gap-3 font-heading text-2xl font-black tracking-wider cursor-none group relative">
+                <div className="relative w-8 h-8 md:w-9 md:h-9 rounded-full overflow-hidden flex items-center justify-center">
+                    <img
+                        src="/logo.png"
+                        alt="OviSoft Logo"
+                        className="w-full h-full object-contain rounded-full group-hover:scale-110 transition-transform duration-500 drop-shadow-[0_0_15px_rgba(0,122,255,0.6)]"
+                    />
+                    {/* Reactive Light Shimmer */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/80 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out pointer-events-none" />
+                </div>
                 <span className="flex items-center">
                     OviSoft<span className="text-accent text-4xl leading-none">.</span>
                 </span>
