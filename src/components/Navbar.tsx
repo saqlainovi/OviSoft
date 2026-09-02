@@ -69,30 +69,38 @@ export default function Navbar() {
                                 : "bg-[#060a14]/60 border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.3)] backdrop-blur-xl"
                         }`}
                     >
-                        {/* 1. Left: Brand Identity */}
+                        {/* 1. Left: High-Impact Brand Identity & Reactive Logo */}
                         <Link
                             href="/"
-                            className="flex items-center gap-2.5 sm:gap-3 group select-none relative"
+                            className="flex items-center gap-3 sm:gap-3.5 group select-none relative"
                         >
-                            <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden flex items-center justify-center p-0.5 bg-gradient-to-tr from-accent/30 to-blue-600/30 border border-white/20 group-hover:border-accent/60 transition-all duration-300">
-                                <img
-                                    src="/logo.png"
-                                    alt="OviSoft"
-                                    className="w-full h-full object-contain rounded-full group-hover:scale-110 transition-transform duration-500 drop-shadow-[0_0_12px_rgba(0,122,255,0.7)]"
-                                />
-                                {/* Dynamic Light Sweep */}
-                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/70 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out pointer-events-none" />
+                            {/* Illuminated Cyber Glass Bezel */}
+                            <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full p-[2px] bg-gradient-to-tr from-accent via-[#007aff] to-[#5d3fd3] shadow-[0_0_25px_rgba(0,122,255,0.5)] group-hover:shadow-[0_0_35px_rgba(0,243,255,0.8)] group-hover:scale-105 transition-all duration-500">
+                                <div className="w-full h-full rounded-full bg-[#040814] flex items-center justify-center p-1.5 overflow-hidden relative">
+                                    <img
+                                        src="/logo.png"
+                                        alt="OviSoft"
+                                        className="w-full h-full object-contain select-none group-hover:scale-110 transition-transform duration-500 drop-shadow-[0_0_10px_rgba(0,243,255,0.7)]"
+                                    />
+                                    {/* Shimmer Light Reflection Sweep */}
+                                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/80 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out pointer-events-none" />
+                                </div>
                             </div>
 
-                            <span className="font-heading font-black text-xl sm:text-2xl tracking-wider text-white">
-                                OviSoft<span className="text-accent text-3xl sm:text-4xl leading-none">.</span>
-                            </span>
+                            <div className="flex flex-col">
+                                <span className="font-heading font-black text-xl sm:text-2xl tracking-wider text-white flex items-center leading-none group-hover:text-cyan-100 transition-colors">
+                                    OviSoft<span className="text-accent text-3xl sm:text-4xl leading-none -mb-1">.</span>
+                                </span>
+                                <span className="text-[8px] sm:text-[9px] uppercase tracking-[0.25em] font-mono font-bold text-accent/80 mt-0.5 hidden xs:block">
+                                    Digital Agency
+                                </span>
+                            </div>
                         </Link>
 
                         {/* 2. Center: Dynamic Island Sliding Nav Links (Desktop) */}
                         <div
                             onMouseLeave={() => setHoveredPath(null)}
-                            className="hidden lg:flex items-center gap-1 bg-white/[0.04] p-1 rounded-full border border-white/[0.08]"
+                            className="hidden lg:flex items-center gap-1 bg-white/[0.04] p-1.5 rounded-full border border-white/[0.08] backdrop-blur-md shadow-inner"
                         >
                             {navItems.map((item) => {
                                 const isActive = pathname === item.href;

@@ -5,24 +5,38 @@ import gsap from "gsap";
 import CinematicLogo from "./CinematicLogo";
 
 export default function Preloader() {
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const preloaderRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        // Allow user to skip by clicking or waiting for full cinematic sequence
-        const timeout = setTimeout(() => {
-            if (preloaderRef.current) {
-                gsap.to(preloaderRef.current, {
-                    opacity: 0,
-                    scale: 1.05,
-                    duration: 0.8,
-                    ease: "power3.inOut",
-                    onComplete: () => setLoading(false)
-                });
+        // Prevent running more than once per browser session
+        try {
+            const hasLoaded = sessionStorage.getItem("ovisoft_has_preloaded");
+            if (hasLoaded === "true") {
+                setLoading(false);
+                return;
             }
-        }, 3600);
 
-        return () => clearTimeout(timeout);
+            // First visit in session
+            setLoading(true);
+            sessionStorage.setItem("ovisoft_has_preloaded", "true");
+
+            const timeout = setTimeout(() => {
+                if (preloaderRef.current) {
+                    gsap.to(preloaderRef.current, {
+                        opacity: 0,
+                        scale: 1.05,
+                        duration: 0.7,
+                        ease: "power3.inOut",
+                        onComplete: () => setLoading(false)
+                    });
+                }
+            }, 3400);
+
+            return () => clearTimeout(timeout);
+        } catch {
+            setLoading(false);
+        }
     }, []);
 
     const handleAnimationComplete = () => {
@@ -30,9 +44,9 @@ export default function Preloader() {
             gsap.to(preloaderRef.current, {
                 opacity: 0,
                 scale: 1.05,
-                duration: 0.8,
+                duration: 0.7,
                 ease: "power3.inOut",
-                delay: 0.4,
+                delay: 0.3,
                 onComplete: () => setLoading(false)
             });
         }
