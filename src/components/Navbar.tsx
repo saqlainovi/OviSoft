@@ -3,20 +3,23 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X, User as UserIcon, Globe } from "lucide-react";
+import { Menu, X, User as UserIcon, Sparkles, ArrowUpRight, ShieldCheck, ChevronDown, LogOut, LayoutDashboard, Settings } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/context/AuthContext";
 import { useLanguage } from "@/context/LanguageContext";
 
 export default function Navbar() {
     const { user, logout, refreshUser } = useAuth();
-    const { language, setLanguage, toggleLanguage } = useLanguage();
+    const { language, setLanguage } = useLanguage();
     const pathname = usePathname();
-    const [isOpen, setIsOpen] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const [hoveredPath, setHoveredPath] = useState<string | null>(null);
+    const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => {
-            setScrolled(window.scrollY > 50);
+            setScrolled(window.scrollY > 20);
         };
         window.addEventListener("scroll", handleScroll);
 
@@ -33,6 +36,12 @@ export default function Navbar() {
         };
     }, [user, refreshUser]);
 
+    // Close mobile menu on page change
+    useEffect(() => {
+        setMobileMenuOpen(false);
+        setUserDropdownOpen(false);
+    }, [pathname]);
+
     const navItems = language === "bn" ? [
         { name: "হোম", href: "/" },
         { name: "সার্ভিস", href: "/services" },
@@ -48,130 +57,328 @@ export default function Navbar() {
     ];
 
     return (
-        <nav
-            className={`fixed top-0 left-0 w-full z-[10000] transition-all duration-300 px-6 py-4 flex justify-between items-center ${
-                scrolled ? "glass" : "bg-transparent border-b border-transparent backdrop-blur-none"
-            }`}
-        >
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-3 font-heading text-2xl font-black tracking-wider cursor-none group relative">
-                <div className="relative w-8 h-8 md:w-9 md:h-9 rounded-full overflow-hidden flex items-center justify-center">
-                    <img
-                        src="/logo.png"
-                        alt="OviSoft Logo"
-                        className="w-full h-full object-contain rounded-full group-hover:scale-110 transition-transform duration-500 drop-shadow-[0_0_15px_rgba(0,122,255,0.6)]"
-                    />
-                    {/* Reactive Light Shimmer */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/80 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out pointer-events-none" />
-                </div>
-                <span className="flex items-center">
-                    OviSoft<span className="text-accent text-4xl leading-none">.</span>
-                </span>
-            </Link>
-
-            {/* Desktop Menu */}
-            <ul className="hidden lg:flex gap-8 items-center absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-                {navItems.map((item) => (
-                    <li key={item.name}>
+        <>
+            <header className="fixed top-0 left-0 right-0 z-[10000] px-4 sm:px-6 lg:px-8 pt-3 sm:pt-4 transition-all duration-300 pointer-events-none">
+                <div className="max-w-7xl mx-auto flex items-center justify-between pointer-events-auto">
+                    
+                    {/* Modern Floating Island Bar */}
+                    <nav
+                        className={`w-full flex items-center justify-between px-4 sm:px-5 py-2.5 sm:py-3 rounded-full transition-all duration-500 border ${
+                            scrolled
+                                ? "bg-[#060a14]/85 border-white/15 shadow-[0_15px_35px_rgba(0,0,0,0.6),0_0_25px_rgba(0,122,255,0.2)] backdrop-blur-2xl"
+                                : "bg-[#060a14]/60 border-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.3)] backdrop-blur-xl"
+                        }`}
+                    >
+                        {/* 1. Left: Brand Identity */}
                         <Link
-                            href={item.href}
-                            className="font-medium text-xs uppercase tracking-widest relative group magnetic-btn"
+                            href="/"
+                            className="flex items-center gap-2.5 sm:gap-3 group select-none relative"
                         >
-                            {item.name}
-                            <span className="absolute bottom-0 left-0 w-0 h-[1px] bg-accent transition-all duration-300 group-hover:w-full"></span>
+                            <div className="relative w-8 h-8 sm:w-9 sm:h-9 rounded-full overflow-hidden flex items-center justify-center p-0.5 bg-gradient-to-tr from-accent/30 to-blue-600/30 border border-white/20 group-hover:border-accent/60 transition-all duration-300">
+                                <img
+                                    src="/logo.png"
+                                    alt="OviSoft"
+                                    className="w-full h-full object-contain rounded-full group-hover:scale-110 transition-transform duration-500 drop-shadow-[0_0_12px_rgba(0,122,255,0.7)]"
+                                />
+                                {/* Dynamic Light Sweep */}
+                                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/70 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out pointer-events-none" />
+                            </div>
+
+                            <span className="font-heading font-black text-xl sm:text-2xl tracking-wider text-white">
+                                OviSoft<span className="text-accent text-3xl sm:text-4xl leading-none">.</span>
+                            </span>
                         </Link>
-                    </li>
-                ))}
-                <li>
-                    <Link
-                        href="/start-project"
-                        className="bg-accent text-black px-5 py-2 rounded-full font-bold text-xs uppercase tracking-widest hover:bg-cyan-300 transition-all shadow-[0_0_20px_rgba(0,243,255,0.3)] hover:shadow-cyan-400/50"
-                    >
-                        {language === "bn" ? "প্রজেক্ট শুরু করুন" : "Start Project"}
-                    </Link>
-                </li>
-            </ul>
 
-            {/* Right Side Actions: Language Toggle & Auth */}
-            <div className="flex items-center gap-4">
-                {/* Language Switcher Button */}
-                <div className="flex items-center bg-white/5 border border-white/10 rounded-full p-1 backdrop-blur-md">
-                    <button
-                        onClick={() => setLanguage("en")}
-                        className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
-                            language === "en"
-                                ? "bg-accent text-black shadow-md shadow-accent/30"
-                                : "text-gray-400 hover:text-white"
-                        }`}
-                    >
-                        EN
-                    </button>
-                    <button
-                        onClick={() => setLanguage("bn")}
-                        className={`px-3 py-1 rounded-full text-xs font-bold transition-all ${
-                            language === "bn"
-                                ? "bg-accent text-black shadow-md shadow-accent/30"
-                                : "text-gray-400 hover:text-white"
-                        }`}
-                    >
-                        বাংলা
-                    </button>
-                </div>
+                        {/* 2. Center: Dynamic Island Sliding Nav Links (Desktop) */}
+                        <div
+                            onMouseLeave={() => setHoveredPath(null)}
+                            className="hidden lg:flex items-center gap-1 bg-white/[0.04] p-1 rounded-full border border-white/[0.08]"
+                        >
+                            {navItems.map((item) => {
+                                const isActive = pathname === item.href;
+                                return (
+                                    <Link
+                                        key={item.href}
+                                        href={item.href}
+                                        onMouseEnter={() => setHoveredPath(item.href)}
+                                        className={`relative px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-colors duration-200 z-10 select-none ${
+                                            isActive ? "text-black font-bold" : "text-gray-300 hover:text-white"
+                                        }`}
+                                    >
+                                        {/* Hover Highlight */}
+                                        {hoveredPath === item.href && !isActive && (
+                                            <motion.div
+                                                layoutId="navHover"
+                                                className="absolute inset-0 rounded-full bg-white/10 -z-10"
+                                                transition={{ type: "spring", stiffness: 450, damping: 30 }}
+                                            />
+                                        )}
 
-                {/* Auth Button */}
-                <div className="hidden lg:block">
-                    {user ? (
-                        <div className="relative group">
-                            <button className="p-2 rounded-full hover:bg-white/10 transition-colors relative">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="1" /><circle cx="12" cy="5" r="1" /><circle cx="12" cy="19" r="1" /></svg>
-                                {!user.emailVerified && (
-                                    <span className="absolute top-0 right-0 w-3 h-3 bg-yellow-500 rounded-full animate-pulse"></span>
-                                )}
-                            </button>
+                                        {/* Active Route Sliding Pill Indicator */}
+                                        {isActive && (
+                                            <motion.div
+                                                layoutId="navActive"
+                                                className="absolute inset-0 rounded-full bg-accent text-black shadow-[0_0_20px_rgba(0,243,255,0.5)] -z-10"
+                                                transition={{ type: "spring", stiffness: 450, damping: 35 }}
+                                            />
+                                        )}
 
-                            <div className="absolute top-full right-0 mt-4 w-72 glass p-4 rounded-xl border border-white/10 invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-300 transform origin-top-right shadow-2xl z-[10001]">
-                                <div className="mb-4 pb-4 border-b border-white/10 flex items-center gap-3">
-                                    {user.photoURL ? (
-                                        <img src={user.photoURL} alt="User" className="w-10 h-10 rounded-full border border-white/20" />
-                                    ) : (
-                                        <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center border border-accent/50 text-accent font-bold">
-                                            {user.name?.[0] || "U"}
-                                        </div>
-                                    )}
-                                    <div className="overflow-hidden">
-                                        <p className="font-bold text-white font-heading truncate">{user.name || "User"}</p>
-                                        <p className="text-xs text-gray-400 truncate">{user.email}</p>
-                                    </div>
-                                </div>
-
-                                <div className="space-y-1 mb-4">
-                                    <Link href="/dashboard" className="w-full text-left flex items-center gap-2 px-3 py-2 text-gray-300 hover:bg-white/5 rounded-lg transition-colors text-sm hover:text-accent">
-                                        Dashboard
+                                        <span>{item.name}</span>
                                     </Link>
-                                    <Link href="/settings" className="w-full text-left flex items-center gap-2 px-3 py-2 text-gray-300 hover:bg-white/5 rounded-lg transition-colors text-sm hover:text-accent">
-                                        Settings
-                                    </Link>
-                                </div>
+                                );
+                            })}
+                        </div>
 
+                        {/* 3. Right: Modern Interactive Actions */}
+                        <div className="flex items-center gap-2 sm:gap-3">
+                            {/* Sleek Language Switcher Capsule */}
+                            <div className="relative flex items-center bg-white/[0.05] border border-white/10 p-0.5 sm:p-1 rounded-full backdrop-blur-md">
                                 <button
-                                    onClick={logout}
-                                    className="w-full text-left flex items-center gap-2 px-3 py-2 text-red-400 hover:bg-red-500/10 rounded-lg transition-colors font-bold text-sm"
+                                    onClick={() => setLanguage("en")}
+                                    className={`relative px-2.5 sm:px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold transition-all z-10 ${
+                                        language === "en" ? "text-black" : "text-gray-400 hover:text-white"
+                                    }`}
                                 >
-                                    LOGOUT
+                                    {language === "en" && (
+                                        <motion.div
+                                            layoutId="langPill"
+                                            className="absolute inset-0 rounded-full bg-accent shadow-[0_0_12px_rgba(0,243,255,0.4)] -z-10"
+                                            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                                        />
+                                    )}
+                                    EN
+                                </button>
+                                <button
+                                    onClick={() => setLanguage("bn")}
+                                    className={`relative px-2.5 sm:px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold transition-all z-10 ${
+                                        language === "bn" ? "text-black" : "text-gray-400 hover:text-white"
+                                    }`}
+                                >
+                                    {language === "bn" && (
+                                        <motion.div
+                                            layoutId="langPill"
+                                            className="absolute inset-0 rounded-full bg-accent shadow-[0_0_12px_rgba(0,243,255,0.4)] -z-10"
+                                            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                                        />
+                                    )}
+                                    বাংলা
                                 </button>
                             </div>
+
+                            {/* User Auth Portal Dropdown (Desktop) */}
+                            <div className="hidden sm:block relative">
+                                {user ? (
+                                    <div className="relative">
+                                        <button
+                                            onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                                            className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 transition-all text-xs text-white"
+                                        >
+                                            {user.photoURL ? (
+                                                <img src={user.photoURL} alt="User" className="w-5 h-5 rounded-full object-cover" />
+                                            ) : (
+                                                <div className="w-5 h-5 rounded-full bg-accent/20 text-accent font-bold flex items-center justify-center text-[10px]">
+                                                    {user.name?.[0] || "U"}
+                                                </div>
+                                            )}
+                                            <span className="max-w-[80px] truncate font-medium">{user.name?.split(" ")[0] || "Account"}</span>
+                                            <ChevronDown size={14} className={`text-gray-400 transition-transform ${userDropdownOpen ? 'rotate-180' : ''}`} />
+                                        </button>
+
+                                        <AnimatePresence>
+                                            {userDropdownOpen && (
+                                                <motion.div
+                                                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                                                    transition={{ duration: 0.2 }}
+                                                    className="absolute right-0 mt-3 w-64 p-4 rounded-2xl bg-[#080d1a]/95 border border-white/15 backdrop-blur-2xl shadow-2xl z-[10002]"
+                                                >
+                                                    <div className="pb-3 mb-3 border-b border-white/10 flex items-center gap-3">
+                                                        {user.photoURL ? (
+                                                            <img src={user.photoURL} alt="User" className="w-9 h-9 rounded-full object-cover border border-white/20" />
+                                                        ) : (
+                                                            <div className="w-9 h-9 rounded-full bg-accent/20 text-accent font-bold flex items-center justify-center text-sm border border-accent/40">
+                                                                {user.name?.[0] || "U"}
+                                                            </div>
+                                                        )}
+                                                        <div className="overflow-hidden">
+                                                            <p className="font-bold text-white text-sm truncate font-heading">{user.name || "User"}</p>
+                                                            <p className="text-[11px] text-gray-400 truncate">{user.email}</p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="space-y-1 mb-3">
+                                                        <Link
+                                                            href="/dashboard"
+                                                            onClick={() => setUserDropdownOpen(false)}
+                                                            className="flex items-center gap-2.5 px-3 py-2 text-gray-300 hover:text-accent hover:bg-white/5 rounded-xl transition-all text-xs font-medium"
+                                                        >
+                                                            <LayoutDashboard size={15} />
+                                                            <span>Dashboard</span>
+                                                        </Link>
+                                                        <Link
+                                                            href="/settings"
+                                                            onClick={() => setUserDropdownOpen(false)}
+                                                            className="flex items-center gap-2.5 px-3 py-2 text-gray-300 hover:text-accent hover:bg-white/5 rounded-xl transition-all text-xs font-medium"
+                                                        >
+                                                            <Settings size={15} />
+                                                            <span>Settings</span>
+                                                        </Link>
+                                                    </div>
+
+                                                    <button
+                                                        onClick={() => {
+                                                            logout();
+                                                            setUserDropdownOpen(false);
+                                                        }}
+                                                        className="w-full flex items-center gap-2 px-3 py-2 text-red-400 hover:bg-red-500/10 rounded-xl transition-all text-xs font-bold"
+                                                    >
+                                                        <LogOut size={15} />
+                                                        <span>Sign Out</span>
+                                                    </button>
+                                                </motion.div>
+                                            )}
+                                        </AnimatePresence>
+                                    </div>
+                                ) : (
+                                    <Link
+                                        href="/login"
+                                        className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-gray-200 hover:text-white text-xs font-semibold uppercase tracking-wider transition-all"
+                                    >
+                                        <UserIcon size={13} className="text-accent" />
+                                        <span>Login</span>
+                                    </Link>
+                                )}
+                            </div>
+
+                            {/* "Start Project" Futuristic CTA Button (Desktop) */}
+                            <Link
+                                href="/start-project"
+                                className="hidden md:inline-flex items-center gap-1.5 bg-accent text-black px-4 py-1.5 sm:py-2 rounded-full font-bold text-xs uppercase tracking-wider hover:bg-cyan-300 transition-all shadow-[0_0_25px_rgba(0,243,255,0.35)] hover:shadow-cyan-400/60 hover:scale-105 active:scale-95"
+                            >
+                                <span>{language === "bn" ? "প্রজেক্ট শুরু করুন" : "Start Project"}</span>
+                                <ArrowUpRight size={14} />
+                            </Link>
+
+                            {/* Mobile Hamburger Toggle Button */}
+                            <button
+                                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                                className="lg:hidden p-2 rounded-full bg-white/[0.06] hover:bg-white/[0.12] border border-white/10 text-white transition-colors flex items-center justify-center cursor-pointer"
+                                aria-label="Toggle Navigation Menu"
+                            >
+                                {mobileMenuOpen ? <X size={20} className="text-accent" /> : <Menu size={20} />}
+                            </button>
                         </div>
-                    ) : (
-                        <Link
-                            href="/login"
-                            className="bg-white/5 border border-white/10 hover:bg-white/10 hover:border-accent/50 text-white px-5 py-1.5 rounded-lg font-bold text-xs uppercase tracking-widest transition-all duration-300 backdrop-blur-md flex items-center gap-2 group hover:shadow-[0_0_20px_rgba(0,243,255,0.2)]"
-                        >
-                            <UserIcon size={14} className="group-hover:text-accent transition-colors" />
-                            <span>Login</span>
-                        </Link>
-                    )}
+                    </nav>
                 </div>
-            </div>
-        </nav>
+            </header>
+
+            {/* Futuristic Fullscreen Mobile Navigation Drawer */}
+            <AnimatePresence>
+                {mobileMenuOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="fixed inset-0 z-[9999] bg-[#030611]/90 backdrop-blur-2xl flex flex-col justify-between p-6 pt-28 lg:hidden"
+                    >
+                        {/* Background Ambient Aura */}
+                        <div className="absolute top-1/4 right-0 w-80 h-80 bg-accent/15 rounded-full filter blur-[120px] pointer-events-none" />
+                        <div className="absolute bottom-1/4 left-0 w-80 h-80 bg-purple-600/15 rounded-full filter blur-[120px] pointer-events-none" />
+
+                        {/* Navigation Links List */}
+                        <div className="space-y-3 relative z-10">
+                            <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-accent pl-3">
+                                {language === "bn" ? "মেনু ও পেজসমূহ" : "NAVIGATION"}
+                            </span>
+
+                            <div className="space-y-1">
+                                {navItems.map((item, idx) => {
+                                    const isActive = pathname === item.href;
+                                    return (
+                                        <motion.div
+                                            key={item.href}
+                                            initial={{ opacity: 0, x: -25 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            transition={{ delay: 0.05 * idx, duration: 0.3 }}
+                                        >
+                                            <Link
+                                                href={item.href}
+                                                onClick={() => setMobileMenuOpen(false)}
+                                                className={`flex items-center justify-between p-3.5 rounded-2xl text-lg font-heading font-bold transition-all ${
+                                                    isActive
+                                                        ? "bg-accent text-black shadow-[0_0_20px_rgba(0,243,255,0.4)]"
+                                                        : "text-gray-300 hover:text-white hover:bg-white/[0.06]"
+                                                }`}
+                                            >
+                                                <span>{item.name}</span>
+                                                <ArrowUpRight size={18} className={isActive ? "text-black" : "text-gray-500"} />
+                                            </Link>
+                                        </motion.div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        {/* Mobile Drawer Bottom Actions */}
+                        <div className="space-y-4 pt-6 border-t border-white/10 relative z-10">
+                            {/* User Account / Auth Bar */}
+                            {user ? (
+                                <div className="p-4 rounded-2xl bg-white/[0.05] border border-white/10 flex items-center justify-between">
+                                    <div className="flex items-center gap-3">
+                                        {user.photoURL ? (
+                                            <img src={user.photoURL} alt="User" className="w-10 h-10 rounded-full object-cover border border-white/20" />
+                                        ) : (
+                                            <div className="w-10 h-10 rounded-full bg-accent/20 text-accent font-bold flex items-center justify-center">
+                                                {user.name?.[0] || "U"}
+                                            </div>
+                                        )}
+                                        <div>
+                                            <p className="font-bold text-white text-sm">{user.name || "User"}</p>
+                                            <p className="text-xs text-gray-400">{user.email}</p>
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        onClick={() => {
+                                            logout();
+                                            setMobileMenuOpen(false);
+                                        }}
+                                        className="text-red-400 hover:text-red-300 text-xs font-bold uppercase tracking-wider"
+                                    >
+                                        Logout
+                                    </button>
+                                </div>
+                            ) : (
+                                <Link
+                                    href="/login"
+                                    onClick={() => setMobileMenuOpen(false)}
+                                    className="w-full flex items-center justify-center gap-2 p-3.5 rounded-2xl bg-white/[0.06] border border-white/10 text-white font-bold text-sm uppercase tracking-wider"
+                                >
+                                    <UserIcon size={16} className="text-accent" />
+                                    <span>{language === "bn" ? "লগইন করুন" : "Account Login"}</span>
+                                </Link>
+                            )}
+
+                            {/* Start Project CTA Button */}
+                            <Link
+                                href="/start-project"
+                                onClick={() => setMobileMenuOpen(false)}
+                                className="w-full flex items-center justify-center gap-2 p-4 rounded-2xl bg-accent text-black font-bold text-sm uppercase tracking-wider shadow-[0_0_25px_rgba(0,243,255,0.4)]"
+                            >
+                                <span>{language === "bn" ? "প্রজেক্ট শুরু করুন" : "Start Project Brief"}</span>
+                                <ArrowUpRight size={18} />
+                            </Link>
+
+                            <div className="flex items-center justify-center gap-2 text-xs text-emerald-400 font-bold">
+                                <ShieldCheck size={14} />
+                                <span>100% SLA Guarantee • Dhaka Cloud Node</span>
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </>
     );
 }
